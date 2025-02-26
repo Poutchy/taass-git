@@ -1,12 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
-    <link href="css/style.css" rel="stylesheet">
-  </head>
-  <body>
-  <p>GLBSKF</p>
-  </body>
-</html>l
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Data Display</title>
+    <script>
+        async function fetchData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const busStop = urlParams.get('busStop');
+            if (busStop) {
+                const response = await fetch('https://gpa.madbob.org/query.php?stop=' + busStop);
+                const data = await response.json();
+                const list = document.getElementById('json-list');
+                data.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `Line: ${item.line}, Hour: ${item.hour}${item.realtime ? ' *' : ''}`;
+                    list.appendChild(listItem);
+                });
+            }
+        }
+        document.addEventListener('DOMContentLoaded', fetchData);
+    </script>
+</head>
+<body>
+    <h1>Bus schedule</h1>
+    <ul id="json-list"></ul>
+</body>
+</html>
+
